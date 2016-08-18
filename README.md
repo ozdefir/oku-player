@@ -41,7 +41,7 @@ The paths to those files should be included in a configuration object, optionall
 		}
 	};
 
-var okuPlayerInstance = new OkuPlayer(config);
+var okuPlayerInstance = new OkuPlayer(okuConfig);
 ....
 ~~~~
 
