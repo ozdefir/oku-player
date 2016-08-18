@@ -1,0 +1,186 @@
+html  {
+font-size:24px;
+
+}
+
+@media (min-width: 500px) and (orientation:portrait) {html{font-size:26px!important;}}
+@media (min-width: 650px) and (orientation:portrait) {html{font-size:30px!important;}}
+@media (min-width: 800px) and (orientation:portrait) {html{font-size:37px!important;}}
+@media (min-width: 900px) and (orientation:portrait) {html{font-size:41px!important;}}
+@media (min-width: 1000px) and (orientation:portrait) {html{font-size:48px!important;}}
+@media (min-width: 1080px) and (orientation:portrait) {html{font-size:54px!important;}}
+
+@media (min-width: 800px) and (orientation:landscape) {html{font-size:26px!important;}}
+@media (min-width: 1024px) and (orientation:landscape) {html{font-size:30px!important;}}
+@media (min-width: 1280px) and (orientation:landscape) {html{font-size:37px!important;}}
+@media (min-width: 1440px) and (orientation:landscape) {html{font-size:41px!important;}}
+@media (min-width: 1680px) and (orientation:landscape) {html{font-size:48px!important;}}
+@media (min-width: 1920px) and (orientation:landscape) {html{font-size:54px!important;}}
+
+
+h1 { font-size: 2em; }
+h2 { font-size: 1.5em; }
+h3 { font-size: 1.17em; }
+h4 { font-size: 1.12em; }
+h5 { font-size: .83em; }
+h6 { font-size: .75em; }
+
+html, body{
+	height:100%;
+}
+html{
+
+}
+body {
+	border-radius:5px;
+	height:100%;
+	margin:0;
+	background-color:#f7f7f7;
+}
+
+#oku-container{
+	height:100%;
+	width:100%;
+	display:block;
+	-webkit-overflow-scrolling: touch;
+  	overflow-y: auto;
+    position: fixed;
+    top: 0%;
+}
+#oku-container iframe{
+	position:absolute;
+	border: 1px solid lightgrey;
+	border-top-right-radius:5px;
+	border-top-left-radius:5px;
+	box-shadow: 0 0 0.1em lightgrey; 
+	height:100%;
+	width:100%;
+	display:block;
+}
+#toplayer {
+	position:fixed;
+	z-index: 10;
+	height:100%;
+	width:100%;
+	height:100vh;
+	width:100vw; 
+	top:0;
+	left:0;
+	cursor:none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+#firstplay {
+	height:100%;
+	width:100%;
+	height:100vh;
+	width:100vw; 
+	text-align:center;
+	cursor:pointer;
+}
+
+#firstplaybutton {
+	height:40%;
+	margin-top:25%;
+	height:40vh;
+	margin-top:25vh;
+}
+
+.navbar {
+	display:none;
+	z-index:100;
+	padding:0 0 0 0;
+	font-family: Georgia, "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	text-align:center;
+	border-top:none;
+}
+
+.navbar .glyphicon {
+	top:0;
+}
+
+#stop{
+    display: none;
+}
+
+
+#display-options .dropdown-menu{
+	min-width: 10em;
+}
+#display-options .btn{
+	margin: 0 4px;
+}
+#display-options li div{
+	width:auto;
+    padding: 3px 10px;
+    padding-left:15px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+	cursor:pointer;
+	-webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+	position:relative;
+}
+
+#text-sizes input{
+	margin-right:10px;
+}
+#show-tt-config input {
+	margin-right:5px;
+	position:relative;
+	top:2px;
+	margin-bottom:0;
+}
+
+#text-sizes a, #show-tt-config li div, #show-tt-config input {
+	cursor:pointer;
+}
+
+
+#show-tt-config .dropdown-menu {
+
+}
+
+
+
+
+.dropdown-menu>li>div:hover, .dropdown-menu>li>div:focus {
+    background-image: -webkit-linear-gradient(top, #f5f5f5 0, #e8e8e8 100%);
+    background-image: -o-linear-gradient(top, #f5f5f5 0, #e8e8e8 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #f5f5f5), to(#e8e8e8));
+    background-image: linear-gradient(to bottom, #f5f5f5 0, #e8e8e8 100%);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', endColorstr='#ffe8e8e8', GradientType=0);
+    background-color: #e8e8e8;
+}
+
+
+.dropdown-menu{
+	display:none;
+}
+
+
+.dropdown:hover>.dropdown-menu, .dropdown:focus>.dropdown-menu{
+	display:block;
+}
+
+#display-options {
+	line-height:initial;
+	text-align: center;
+	display:inline-block;
+	padding:8px;
+
+}
+#loading-animation{
+	position:fixed;
+	z-index:100;
+	width:16vmax;
+	top:calc(50vh - 8vmax);
+	left:calc(50vw - 8vmax);
+	visibility:visible;
+}
