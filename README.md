@@ -53,5 +53,5 @@ okuPlayerInstance.on("pageended", "pageturnEffect");
 Visit [readiance.org](https://readiance.org) to see working examples.
 
 ## Limitations
-+Because of the same-origin policy the XHTML and JSON files should be hosted on the same domain as the timedtext player unless the target host allows CORS.
-+Some browsers such as Google Chrome do not allow XHR for local files.
++ Because of the same-origin policy the XHTML and JSON files should be hosted on the same domain as the timedtext player unless the target host allows CORS.
++ Some browsers such as Google Chrome do not allow XHR for local files.
