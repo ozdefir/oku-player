@@ -25,7 +25,7 @@ var OkuPlayer = function (config) {
 	var osx = ua.match(/Macintosh/);
 	if(iOS) {
 		if(webkit && ua.match(/CriOS/)){
-			this.browser = "ios_chrome";
+			this.browser = "ios_safari";
 		}
 		else if(webkit && ua.match(/FxiOS/i)){
 			this.browser = "ios_firefox";
@@ -197,8 +197,9 @@ var OkuPlayer = function (config) {
 		+'<div id="display-options" >'
 		+'<span id="stop" class="btn btn-primary" ><span class="glyphicon glyphicon-pause" aria-hidden="true"></span></span>'
 		+'<span id="play" class="btn btn-primary" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></span>'
+		+ (this.meta.fullscreen && this.embedded ? '<span  id="fullscreen-link" title="Fullscreen" onclick="top.location.href = \'' + this.meta.fullscreen + '\'" class="btn btn-primary"' +  'target="_top"' + '><span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span></span>' : '')
 		+'<span id="set-text-size"  class="dropdown">'
-		+'<span id="show-text-sizes" class="dropdown-toggle btn btn-primary"  data-toggle="dropdown"  ><span class="glyphicon glyphicon-text-size" aria-hidden="true"></span></span>'
+		+'<label for="toggle-1" id="show-text-sizes" class="dropdown-toggle btn btn-primary"  data-toggle="dropdown"  ><span class="glyphicon glyphicon-text-size" aria-hidden="true"></span></label><input type="checkbox" id="toggle-1">'
 		+'<ul id="text-sizes" class="dropdown-menu"  style="list-style: none;" >'
 		+'<li><div><input type="radio" value=0  name="fontSize">XX-Small</div></li>'
 		+'<li><div><input type="radio" value=1  name="fontSize">X-Small</div></li>'
@@ -209,14 +210,18 @@ var OkuPlayer = function (config) {
 		+'<li><div><input type="radio" value=6  name="fontSize">XX-Large</div></li>'
 		+'</ul>'
 		+'</span>'
-		+ (this.meta.fullscreen && this.embedded ? '<span  id="fullscreen-link" title="Fullscreen" onclick="top.location.href = \'' + this.meta.fullscreen + '\'" class="btn btn-primary"' +  'target="_top"' + '><span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span></span>' : '')
-		+ (this.meta.toc ? '<span  id="toc-link" title="Table of Contents" onclick="top.location.href = \'' + this.meta.toc + '\'" class="btn btn-primary"'  + '><span class="glyphicon glyphicon-list" aria-hidden="true"></span></span>' : '')
-		+'<span  id="show-tt-config"  class="dropdown"><span  class="dropdown-toggle btn btn-primary" data-toggle="dropdown"  ><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></span>'
+		+'<span  id="show-tt-config"  class="dropdown"><label  for="toggle-2"  class="dropdown-toggle btn btn-primary" data-toggle="dropdown"  ><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></label><input type="checkbox" id="toggle-2">'
 		+'<ul class="dropdown-menu"  style="list-style: none;">'
+		+'<li><div  id="night-mode" ><input id="nmode"  type="checkbox" >Night Mode</div></li>\n'
 		+'<li><div id="dcont" ><input id="cont" type="checkbox" '  + (this.continuous ? 'checked ' : "") + 'value="cont">Continuous</div> </li>'
 		+'<li><div id="dautoscroll" ><input id="autoscroll" type="checkbox" '  + (this.autoscroll ? 'checked ' : "") + 'value="dautoscroll">Auto-scroll</div></li>'
 		+'<li><div  id="blockview" ><input id="select-display-mode"  type="checkbox" >Block View</div></li>\n'
 		+'</ul>'
+		+'</span>'
+		+'<span id="navigation" class="btn-group">'
+		+ (this.meta.previuos ? '<span  id="previous-link" title="Previuos Chapter" onclick="top.location.href = \'' + this.meta.previuos + '\'" class="btn btn-primary"'  + '><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></span>' : '')
+		+ (this.meta.toc ? '<span  id="toc-link" title="Table of Contents" onclick="top.location.href = \'' + this.meta.toc + '\'" class="btn btn-primary"'  + '><span class="glyphicon glyphicon-list" aria-hidden="true"></span></span>' : '')
+		+ (this.meta.next ? '<span  id="next-link" title="Next Chapter" onclick="top.location.href = \'' + this.meta.next + '\'" class="btn btn-primary"'  + '><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></span>' : '')
 		+'</span>'
 		+'</div>'
 		+'</nav>';
@@ -293,19 +298,47 @@ var OkuPlayer = function (config) {
 
 						document.querySelector("#play").addEventListener("click", this.play.bind(this));
 						document.querySelector("#stop").addEventListener("click", this.suspend.bind(this));
+						document.querySelector("#show-text-sizes").addEventListener("click", function(){
+									document.querySelector("#toggle-2").checked = false;
+								});
+						document.querySelector("#show-tt-config").addEventListener("click", function(){
+									document.querySelector("#toggle-1").checked = false;
+								});
 						document.querySelector("#dcont").addEventListener("click", (function(e){
-								e.currentTarget === e.target && e.currentTarget.firstElementChild.click();
-								this.continuous = e.currentTarget.firstElementChild.checked
+									if(e.currentTarget === e.target) {
+										e.currentTarget.firstElementChild.click();
+										document.getElementById("toggle-2").checked = false;
+									}
+									this.continuous = e.currentTarget.firstElementChild.checked
 							}).bind(this));
-							
+						document.querySelector("#night-mode").addEventListener("click", (function(e){
+									if(e.currentTarget === e.target) {
+										e.currentTarget.firstElementChild.click();
+										document.getElementById("toggle-2").checked = false;
+									}
+									if(e.currentTarget.firstElementChild.checked){
+										this.xhtmlDocument.body.className = "night-mode";
+										document.body.className = "night-mode";
+									}
+									else{
+										this.xhtmlDocument.body.className = "day-mode";
+										document.body.className = "day-mode";
+									}									
+							}).bind(this));							
 						document.querySelector("#dautoscroll").addEventListener("click", (function(e){
-								e.currentTarget === e.target && e.currentTarget.firstElementChild.click();
-								this.autoscroll = e.currentTarget.firstElementChild.checked
+									if(e.currentTarget === e.target) {
+										e.currentTarget.firstElementChild.click();
+										document.getElementById("toggle-2").checked = false;
+									}
+									this.autoscroll = e.currentTarget.firstElementChild.checked
 							}).bind(this));
 							
 						document.querySelector("#blockview").addEventListener("click", (function(e){
-								e.currentTarget === e.target && e.currentTarget.firstElementChild.click();
-								if (e.currentTarget.firstElementChild.checked) {
+									if(e.currentTarget === e.target) {
+										e.currentTarget.firstElementChild.click();
+										document.getElementById("toggle-2").checked = false;
+									}
+									if (e.currentTarget.firstElementChild.checked) {
 									this.xhtmlContentDiv.className = "block-view";
 									this.xhtmlContentDiv.className = this.xhtmlContentDiv.className.replace(/regular-view/,"block-view");
 								}
@@ -321,7 +354,10 @@ var OkuPlayer = function (config) {
 						var fontSizeRadios = document.querySelectorAll("#text-sizes div");
 						for(i=0; i<fontSizeRadios.length; i++) {
 							fontSizeRadios[i].addEventListener("click", (function(e){
-									e.currentTarget === e.target && e.currentTarget.firstElementChild.click();
+									if(e.currentTarget === e.target) {
+										e.currentTarget.firstElementChild.click();
+										document.getElementById("toggle-1").checked = false;
+									}
 									this.xhtmlContentDiv.style.fontSize = fontSizes[e.currentTarget.firstElementChild.value];
 									if (!this.isFragmentInView(this.currentIndex)){
 										this.events.pageended.dispatch();
@@ -690,6 +726,9 @@ var OkuPlayer = function (config) {
 						this.pagebreak2 = this.currentFragment.element.parentNode.insertBefore(this.pagebreak2, this.currentFragment.element.nextSibling);
 					}
 					console.log("second pagebreak moved");
+					if(this.browser.indexOf("ios_safari") !== -1){
+						this.currentFragment.element.scrollIntoView(); // without this somehow single large fragments cause to scroll to top
+					}
 				}
 				else{
 					console.log("ios before second scroll 0",this.innerFrame.offsetParent.scrollTop, this.innerFrame.offsetTop, this.currentFragment.element.offsetTop);
@@ -712,7 +751,7 @@ var OkuPlayer = function (config) {
 						console.log("before second scroll", window.scrollY,  window.innerHeight, this.pagebreak2.offsetTop  - this.currentFragment.element.offsetTop);
 						this.innerFrame.offsetParent.scrollTop =  this.innerFrame.offsetTop + this.currentFragment.element.offsetTop;
 						console.log("before second scroll", window.scrollY,  window.innerHeight, this.pagebreak2.offsetTop  - this.currentFragment.element.offsetTop);
-						this.innerFrame.offsetParent.scrollTop += -1/2*(window.innerHeight - (this.pagebreak2.offsetTop  - this.currentFragment.element.offsetTop))
+						this.innerFrame.offsetParent.scrollTop += -1/2*((window.innerHeight - 55) - (this.pagebreak2.offsetTop  - this.currentFragment.element.offsetTop))
 						console.log("after second scroll", window.scrollY,  window.innerHeight, this.pagebreak2.offsetTop  - this.currentFragment.element.offsetTop);
 					}				
 				
@@ -875,7 +914,7 @@ var OkuPlayer = function (config) {
 		}
 		else {
 			var visible = element.offsetTop +  this.innerFrame.offsetTop >= this.innerFrame.offsetParent.scrollTop
-					&& element.offsetTop + element.offsetHeight + this.innerFrame.offsetTop <  this.innerFrame.offsetParent.scrollTop + innerHeight;
+					&& element.offsetTop + element.offsetHeight + this.innerFrame.offsetTop  <  this.innerFrame.offsetParent.scrollTop + (innerHeight - 55);
 					// console.log("ios_safari", visible,   element.offsetTop,  window.pageYOffset);
 		}
 		// console.log(visible);
