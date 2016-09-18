@@ -1,21 +1,21 @@
 html  {
-font-size:24px;
+font-size:20px;
 
 }
 
-@media (min-width: 500px) and (orientation:portrait) {html{font-size:26px!important;}}
-@media (min-width: 650px) and (orientation:portrait) {html{font-size:30px!important;}}
-@media (min-width: 800px) and (orientation:portrait) {html{font-size:37px!important;}}
-@media (min-width: 900px) and (orientation:portrait) {html{font-size:41px!important;}}
-@media (min-width: 1000px) and (orientation:portrait) {html{font-size:48px!important;}}
-@media (min-width: 1080px) and (orientation:portrait) {html{font-size:54px!important;}}
+@media (min-width: 500px) and (orientation:portrait) {html{font-size:22px!important;}}
+@media (min-width: 650px) and (orientation:portrait) {html{font-size:26px!important;}}
+@media (min-width: 800px) and (orientation:portrait) {html{font-size:33px!important;}}
+@media (min-width: 900px) and (orientation:portrait) {html{font-size:37px!important;}}
+@media (min-width: 1000px) and (orientation:portrait) {html{font-size:44px!important;}}
+@media (min-width: 1080px) and (orientation:portrait) {html{font-size:50px!important;}}
 
-@media (min-width: 800px) and (orientation:landscape) {html{font-size:26px!important;}}
-@media (min-width: 1024px) and (orientation:landscape) {html{font-size:30px!important;}}
-@media (min-width: 1280px) and (orientation:landscape) {html{font-size:37px!important;}}
-@media (min-width: 1440px) and (orientation:landscape) {html{font-size:41px!important;}}
-@media (min-width: 1680px) and (orientation:landscape) {html{font-size:48px!important;}}
-@media (min-width: 1920px) and (orientation:landscape) {html{font-size:54px!important;}}
+@media (min-width: 800px) and (orientation:landscape) {html{font-size:22px!important;}}
+@media (min-width: 1024px) and (orientation:landscape) {html{font-size:26px!important;}}
+@media (min-width: 1280px) and (orientation:landscape) {html{font-size:33px!important;}}
+@media (min-width: 1440px) and (orientation:landscape) {html{font-size:37px!important;}}
+@media (min-width: 1680px) and (orientation:landscape) {html{font-size:44px!important;}}
+@media (min-width: 1920px) and (orientation:landscape) {html{font-size:50px!important;}}
 
 
 body {
@@ -91,12 +91,12 @@ p{
 	text-align:center;
 	padding:0.3em 0 0.3em 0;
 	font-family: "Times New Roman", Times, serif;
-	background-color:#FFF;
+	background-color:inherit;
 	outline:none;
 	line-height:1.4;
 }
 #intro-div.fragm-active{
-	background-color:#FFF;
+	background-color:inherit;
 	outline:none;
 }
 
@@ -136,4 +136,23 @@ p{
 }
 .fragm[data-inview='true'] {
 	visibility:visible!important
+}
+body.night-mode {
+	color:#fff;
+	background-color:black;
+}
+body.night-mode  .fragm{
+	color:#888;
+	background-color:black;
+}
+body.night-mode .fragm-paused, body.night-mode #intro-div.fragm-paused>*>span{
+	color:#fff;
+	background-color:inherit;
+
+}
+body.night-mode .fragm-active, body.night-mode #intro-div.fragm-active>*>span{
+	color:#fff;
+	outline:none;
+	background-color:#222;
+	outline:none;
 }
