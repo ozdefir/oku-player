@@ -1,6 +1,5 @@
 html  {
-font-size:24px;
-
+	font-size:24px;
 }
 
 @media (min-width: 500px) and (orientation:portrait) {html{font-size:26px!important;}}
@@ -26,16 +25,14 @@ h5 { font-size: .83em; }
 h6 { font-size: .75em; }
 
 html, body{
-	height:100%;
-}
-html{
-
+	height:100.1%;
 }
 body {
 	border-radius:5px;
-	height:100%;
+	height:100.1%;
 	margin:0;
 	background-color:#f7f7f7;
+	 overflow: hidden;
 }
 
 #oku-container{
@@ -105,7 +102,12 @@ body {
     display: none;
 }
 
-
+#navigation.btn-group {
+    margin: 0 4px;
+}
+#navigation.btn-group .btn {
+    margin: 0!important;
+}
 #display-options .dropdown-menu{
 	min-width: 10em;
 }
@@ -130,7 +132,7 @@ body {
 #text-sizes input{
 	margin-right:10px;
 }
-#show-tt-config input {
+#show-tt-config .dropdown-menu input {
 	margin-right:5px;
 	position:relative;
 	top:2px;
@@ -165,10 +167,15 @@ body {
 }
 
 
-.dropdown:hover>.dropdown-menu, .dropdown:focus>.dropdown-menu{
-	display:block;
-}
 
+#toggle-1, #toggle-2 {
+   position: absolute;
+   top: -9999px;
+   left: -9999px;
+}
+input[type=checkbox]:checked ~ .dropdown-menu {
+   display:block;
+}
 #display-options {
 	line-height:initial;
 	text-align: center;
@@ -183,4 +190,10 @@ body {
 	top:calc(50vh - 8vmax);
 	left:calc(50vw - 8vmax);
 	visibility:visible;
+}
+body.night-mode .navbar{
+
+}
+body.night-mode iframe{
+	border: 1px solid black!important;
 }
