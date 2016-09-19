@@ -3,11 +3,12 @@ var scripts = document.getElementsByTagName("script");
 var okuPath = scripts[scripts.length-1].src.replace(/\/[^\/]+$/, "/");
 console.log('OKUPATH', okuPath);
 var OkuPlayer = function (config) {
-
+    var okuPlayerInstance = this;
 	this.readyState = 0;
 	this.continuous = true;
 	this.autoscroll = true;
 	this.pagedView = true;
+    this.startFrom = 0;
 	window.self !== window.top ? this.embedded = true : this.embedded = false ;
 
     this.okuPath = okuPath;
@@ -164,9 +165,31 @@ var OkuPlayer = function (config) {
 		if(this.settings.continuous == false) this.continuous = false;
 		if(this.settings.autoscroll == false) this.autoscroll = false;
 		if(this.settings.pagedView == false) this.pagedView = false;
+        if(this.settings.startFrom) this.startFrom = parseInt(this.settings.startFrom);
 	}
-	
-	if(config.meta)this.meta = config.meta;
+    this.checkHash = function(){
+        console.log('checking hash');
+        if(startFromHash = window.location.hash.match(/OkuStart([0-9]*)/)) {
+            console.log(startFromHash);
+            this.startFrom = parseInt(startFromHash[1]);
+        }
+    }
+    this.checkHashChange = function(){
+        console.log('checking hash change');
+        if(startFromHash = window.location.hash.match(/OkuStart([0-9]*)/)) {
+            console.log(startFromHash);
+            if(this.readyState && parseInt(startFromHash[1]) < this.fragments.length) {
+                this.startFrom = parseInt(startFromHash[1]);
+                this.playFragment(this.startFrom);
+                this.scroll();
+            }
+        }
+
+    }    
+	window.addEventListener('hashchange', this.checkHashChange.bind(this));
+    this.checkHash();
+    
+    if(config.meta)this.meta = config.meta;
 	
 	this.introDiv = '<div id="intro-div">';
 	if(this.meta) {
@@ -412,8 +435,11 @@ var OkuPlayer = function (config) {
 								this.xhtmlDocument.body.ontouchstart = showHideOptions.bind(this);
 								document.body.ontouchstart = showHideOptions.bind(this); */
 								this.xhtmlDocument.body.style.overflow = "auto";
-								this.scroll();
 								this.play();
+                                if(this.startFrom < this.fragments.length) {
+                                    this.playFragment(this.startFrom);
+                                    this.scroll();
+                                }
 							}).bind(this);
 
 /* 						if(this.audio.readyState > 0){
@@ -475,6 +501,7 @@ var OkuPlayer = function (config) {
 	
 	this.playFragment = function(fragmentIndex){
 		console.log("deactivating last element", this.currentIndex);
+        console.log(this.currentFragment);
 		this.currentFragment.element.className = "fragm";
 		this.activateFragment(fragmentIndex);
 		!this.seekBuffer && this.browser == "android_chrome" ? this.audio.muted = true : "";
@@ -609,7 +636,7 @@ var OkuPlayer = function (config) {
 			// console.log("timeout cleared", this.currentFragment.timeout);
 			if(!this.audio) console.log(this);
 			if(!this.audio.currentTime) return;
-			if(this.audio.currentTime + 1 < this.currentFragment.begi) { // in case something goes wrong 
+			if(this.audio.currentTime + 1 < this.currentFragment.begin) { // in case something goes wrong 
 				console.log(this.audio.currentTime,  this.currentFragment.begin);
 				this.suspend(); 
 				console.log("something went wrong");
