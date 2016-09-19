@@ -437,8 +437,11 @@ var OkuPlayer = function (config) {
 								this.xhtmlDocument.body.style.overflow = "auto";
 								this.play();
                                 if(this.startFrom < this.fragments.length) {
-                                    this.playFragment(this.startFrom);
-                                    this.scroll();
+                                    setTimeout( (function(){
+                                            this.playFragment(this.startFrom);
+                                            this.audio.currentTime = this.currentFragment.begin-this.seekBuffer;
+                                            this.scroll();
+                                        }).bind(this), 1000)
                                 }
 							}).bind(this);
 
