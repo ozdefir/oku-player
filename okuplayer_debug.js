@@ -260,7 +260,7 @@ var OkuPlayer = function (config) {
 	
 	var bscss = document.createElement('style');
 	bscss.innerHTML = '@import "' +  this.okuPath + 'css/bootstrap.css";'
-					+ '@import "' +  this.okuPath + 'css/outer.css + '";'
+					+ '@import "' +  this.okuPath + 'css/outer.css?nc=' + (new Date()).getTime() + '";'
 	document.head.appendChild(bscss);
 	
 	
@@ -268,7 +268,7 @@ var OkuPlayer = function (config) {
 	
 	this.loadFile = function (url, callback) {
 				var req = new XMLHttpRequest();
-				req.open("GET", url + '?nocache=', true);
+				req.open("GET", url + '?nocache=' + (new Date()).getTime(), true);
 				req.onreadystatechange = (function () {
 					if (req.readyState == 4) {
 						console.log(this);
@@ -977,7 +977,7 @@ var OkuPlayer = function (config) {
 	this.xhtmlHead += '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
 	this.xhtmlHead += '<style >body{visibility:hidden}</style>';
 	this.xhtmlHead += '<meta name="apple-mobile-web-app-status-bar-style" content="black">';
-	this.xhtmlHead += '<style >@import "' +  this.okuPath +'css/inner.css?nc=' + '";</style>';
+	this.xhtmlHead += '<style >@import "' +  this.okuPath +'css/inner.css?nc=' + (new Date()).getTime() + '";</style>';
 	this.xhtmlHead += '<meta http-equiv="cache-control" content="max-age=0" />'
 	this.xhtmlHead += '<meta http-equiv="cache-control" content="no-cache" />'
 	this.xhtmlHead += '<meta http-equiv="expires" content="0" />'
