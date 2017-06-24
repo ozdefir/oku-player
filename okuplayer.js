@@ -8,7 +8,10 @@ var OkuPlayer = function (config) {
 	this.continuous = true;
 	this.autoscroll = true;
 	this.pagedView = true;
-    this.startFrom = 0;
+	this.fontSize = 3;
+
+    this.startFrom = -1;
+    this.fragmentClassName = "fragm";
 	window.self !== window.top ? this.embedded = true : this.embedded = false ;
 
     this.okuPath = okuPath;
@@ -29,7 +32,7 @@ var OkuPlayer = function (config) {
 			this.browser = "ios_safari";
 		}
 		else if(webkit && ua.match(/FxiOS/i)){
-			this.browser = "ios_firefox";
+			this.browser = "ios_safari";
 		}
 		else if(webkit && ua.match(/OPiOS/)){
 			this.browser = "ios_opera";
@@ -166,6 +169,9 @@ var OkuPlayer = function (config) {
 		if(this.settings.autoscroll == false) this.autoscroll = false;
 		if(this.settings.pagedView == false) this.pagedView = false;
         if(this.settings.startFrom) this.startFrom = parseInt(this.settings.startFrom);
+        if(this.settings.fragmentClassName) this.fragmentClassName = this.settings.fragmentClassName;
+        if(this.settings.translation) this.translation = this.settings.translation;
+        console.log(this.settings.translation, this.translation)
 	}
     this.checkHash = function(){
         console.log('checking hash');
@@ -218,9 +224,9 @@ var OkuPlayer = function (config) {
 		+'</div></div>'
 		+'<nav class="navbar navbar-default navbar-fixed-bottom">'
 		+'<div id="display-options" >'
-		+'<span id="stop" class="btn btn-primary" ><span class="glyphicon glyphicon-pause" aria-hidden="true"></span></span>'
-		+'<span id="play" class="btn btn-primary" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></span>'
-		+ (this.meta.fullscreen && this.embedded ? '<span  id="fullscreen-link" title="Fullscreen" onclick="top.location.href = \'' + this.meta.fullscreen + '\'" class="btn btn-primary"' +  'target="_top"' + '><span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span></span>' : '')
+		+'<span id="stop" tabindex="1" class="btn btn-primary" ><span class="glyphicon glyphicon-pause" aria-hidden="true"></span></span>'
+		+'<span id="play" tabindex="1" class="btn btn-primary" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></span>'
+		+ (this.meta.fullscreen && this.embedded ? '<span  id="fullscreen-link" tabindex="1" title="Fullscreen" onclick="top.location.href = \'' + this.meta.fullscreen + '\'" class="btn btn-primary"' +  'target="_top"' + '><span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span></span>' : '')
 		+'<span id="set-text-size"  class="dropdown">'
 		+'<label for="toggle-1" id="show-text-sizes" class="dropdown-toggle btn btn-primary"  data-toggle="dropdown"  ><span class="glyphicon glyphicon-text-size" aria-hidden="true"></span></label><input type="checkbox" id="toggle-1">'
 		+'<ul id="text-sizes" class="dropdown-menu"  style="list-style: none;" >'
@@ -233,18 +239,19 @@ var OkuPlayer = function (config) {
 		+'<li><div><input type="radio" value=6  name="fontSize">XX-Large</div></li>'
 		+'</ul>'
 		+'</span>'
-		+'<span  id="show-tt-config"  class="dropdown"><label  for="toggle-2"  class="dropdown-toggle btn btn-primary" data-toggle="dropdown"  ><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></label><input type="checkbox" id="toggle-2">'
+		+'<span  id="show-tt-config" class="dropdown"><label  for="toggle-2"  class="dropdown-toggle btn btn-primary" data-toggle="dropdown"  ><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></label><input type="checkbox" id="toggle-2">'
 		+'<ul class="dropdown-menu"  style="list-style: none;">'
 		+'<li><div  id="night-mode" ><input id="nmode"  type="checkbox" >Night Mode</div></li>\n'
 		+'<li><div id="dcont" ><input id="cont" type="checkbox" '  + (this.continuous ? 'checked ' : "") + 'value="cont">Continuous</div> </li>'
 		+'<li><div id="dautoscroll" ><input id="autoscroll" type="checkbox" '  + (this.autoscroll ? 'checked ' : "") + 'value="dautoscroll">Auto-scroll</div></li>'
 		+'<li><div  id="blockview" ><input id="select-display-mode"  type="checkbox" >Block View</div></li>\n'
+		+'<li><div  id="shortcuts-list" >Shortcuts</div></li>\n'
 		+'</ul>'
 		+'</span>'
 		+'<span id="navigation" class="btn-group">'
-		+ (this.meta.previuos ? '<span  id="previous-link" title="Previuos Chapter" onclick="top.location.href = \'' + this.meta.previuos + '\'" class="btn btn-primary"'  + '><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></span>' : '')
-		+ (this.meta.toc ? '<span  id="toc-link" title="Table of Contents" onclick="top.location.href = \'' + this.meta.toc + '\'" class="btn btn-primary"'  + '><span class="glyphicon glyphicon-list" aria-hidden="true"></span></span>' : '')
-		+ (this.meta.next ? '<span  id="next-link" title="Next Chapter" onclick="top.location.href = \'' + this.meta.next + '\'" class="btn btn-primary"'  + '><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></span>' : '')
+		+ (this.meta.previuos ? '<span  id="previous-link" tabindex="1" title="Previuos Chapter" onclick="top.location.href = \'' + this.meta.previuos + '\'" class="btn btn-primary"'  + '><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></span>' : '')
+		+ (this.meta.toc ? '<span  id="toc-link" tabindex="1" title="Table of Contents" onclick="top.location.href = \'' + this.meta.toc + '\'" class="btn btn-primary"'  + '><span class="glyphicon glyphicon-list" aria-hidden="true"></span></span>' : '')
+		+ (this.meta.next ? '<span  id="next-link" tabindex="1" title="Next Chapter" onclick="top.location.href = \'' + this.meta.next + '\'" class="btn btn-primary"'  + '><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></span>' : '')
 		+'</span>'
 		+'</div>'
 		+'</nav>';
@@ -297,19 +304,28 @@ var OkuPlayer = function (config) {
 
 				this.xhtmlContentDiv =  this.xhtmlDocument.querySelector("#xhtml-content");
 				this.xhtmlContentDiv.className = "regular-view nopage";
-				this.fragmentElements = this.xhtmlContentDiv.querySelectorAll(".fragm");
+				this.fragmentElements = this.xhtmlContentDiv.querySelectorAll("." + this.fragmentClassName);
 				this.loadFile(this.syncmapPath, (function(syncmapContent) {
-					if (syncmapContent){
-						this.fragments = JSON.parse(syncmapContent).fragments;
+					
+                   
+                    if (syncmapContent){
+                        
+                        syncmap = JSON.parse(syncmapContent);
+						this.fragments = syncmap.fragments;
 						for(var i=0; i < this.fragments.length; i++){
 							this.fragments[i].element = this.fragmentElements[i];
+                            this.fragments[i].index = i;
 							this.fragments[i].element.addEventListener("click", this.playFragment.bind(this, i))
-						}
+                            if (this.translation && this.fragments[i].tr && this.fragments[i].tr[this.translation]){
+                                this.fragments[i].element.textContent = this.fragments[i].tr[this.translation];
+                            }
+                        }
 
 						this.currentIndex = -1;
 						this.intro = {};
 						this.intro.begin = 0;
 						this.intro.end = this.fragments[0].begin;
+                        this.intro.index = -1;
 						this.intro.element =  this.xhtmlDocument.querySelector("#intro-div");
 						this.fragments[-1] = this.intro;
 						this.intro.element.addEventListener("click", this.playFragment.bind(this, -1))
@@ -319,8 +335,12 @@ var OkuPlayer = function (config) {
 						this.toplayer = document.querySelector("#toplayer");
 						var firstPlay = document.querySelector("#firstplay");
 
-						document.querySelector("#play").addEventListener("click", this.play.bind(this));
-						document.querySelector("#stop").addEventListener("click", this.suspend.bind(this));
+						document.querySelector("#play").addEventListener("click", (function() {
+                                this.play();
+                            }).bind(this));
+						document.querySelector("#stop").addEventListener("click", (function() {
+                                this.suspend();
+                            }).bind(this));
 						document.querySelector("#show-text-sizes").addEventListener("click", function(){
 									document.querySelector("#toggle-2").checked = false;
 								});
@@ -347,7 +367,9 @@ var OkuPlayer = function (config) {
 										this.xhtmlDocument.body.className = "day-mode";
 										document.body.className = "day-mode";
 									}									
-							}).bind(this));							
+							}).bind(this));
+                        // document.querySelector("#night-mode").click();
+							
 						document.querySelector("#dautoscroll").addEventListener("click", (function(e){
 									if(e.currentTarget === e.target) {
 										e.currentTarget.firstElementChild.click();
@@ -372,6 +394,11 @@ var OkuPlayer = function (config) {
 									this.events.pageended.dispatch();
 								}
 							}).bind(this));
+                         
+                        document.querySelector("#shortcuts-list").addEventListener("click", (function(e){
+                            document.getElementById("toggle-2").checked = false;
+                            alert(this.shortcutslist);
+                        }).bind(this));
 							
 						var fontSizes = ["50%", "65%", "80%", "100%", "130%", "170%", "220%"];
 						var fontSizeRadios = document.querySelectorAll("#text-sizes div");
@@ -381,7 +408,8 @@ var OkuPlayer = function (config) {
 										e.currentTarget.firstElementChild.click();
 										document.getElementById("toggle-1").checked = false;
 									}
-									this.xhtmlContentDiv.style.fontSize = fontSizes[e.currentTarget.firstElementChild.value];
+                                    this.fontSize = e.currentTarget.firstElementChild.value;
+									this.xhtmlContentDiv.style.fontSize = fontSizes[this.fontSize];
 									if (!this.isFragmentInView(this.currentIndex)){
 										this.events.pageended.dispatch();
 									}											// console.log(i, fontSizes, fontSizes[i], this.xhtmlContentDiv.style.fontSize);
@@ -421,6 +449,7 @@ var OkuPlayer = function (config) {
 								this.audio.addEventListener('seeked', function(){
 									this.loadingAnimation.style.display = 'none';
 								}); */
+                                
 								firstPlay.style.display = "none";
 								this.xhtmlDocument.body.style.color = "#333";
 								// document.body.style.overflowY = "auto";
@@ -435,16 +464,35 @@ var OkuPlayer = function (config) {
 								this.xhtmlDocument.body.ontouchstart = showHideOptions.bind(this);
 								document.body.ontouchstart = showHideOptions.bind(this); */
 								this.xhtmlDocument.body.style.overflow = "auto";
+                                // this.audio.playbackRate = 0.9;
 								this.play();
-                                if(this.startFrom < this.fragments.length) {
+                                if(0 < this.startFrom < this.fragments.length) {
                                     setTimeout( (function(){
                                             this.playFragment(this.startFrom);
                                             this.audio.currentTime = this.currentFragment.begin-this.seekBuffer;
-                                            this.scroll();
-                                        }).bind(this), 1000)
-                                }
+                                        }).bind(this), 100)
+                               }
+                                window.onkeydown = catchKey.bind(this);
+                                this.innerFrame.contentWindow.onkeydown = catchKey.bind(this);
+                                
+                                var tabreach = document.querySelectorAll("[tabindex]");
+                                for (i=0; i<tabreach.length; i++) {
+                                    console.log("tabindex", tabreach[i]);
+                                    tabreach[i].onkeydown = function(evt) {
+                                        if(evt.keyCode == "13") {
+                                            tabreach[i].click();
+                                            if(tabreach[i].id == "stop") document.querySelector("#play").focus();
+                                            if(tabreach[i].id == "play") document.querySelector("#stop").focus();
+                                        }
+                                       
+                                    }
+                               }
+                                
 							}).bind(this);
-
+                            
+                            window.onkeydown = catchKeyBeforeStart.bind(this);
+                            this.innerFrame.contentWindow.onkeydown = catchKeyBeforeStart.bind(this);
+                            
 /* 						if(this.audio.readyState > 0){
 							this.audio.currentTime = this.currentFragment.begin;
 						} */
@@ -475,7 +523,8 @@ var OkuPlayer = function (config) {
 	}
 	console.log(this.audio.outerHTML);
 
-	if(this.browser.match(/firefox|android_native|android_chrome/)) {
+	//if(this.browser.match(/firefox|android_native|android_chrome/)) {
+	if(this.browser.match(/firefox/)) {
 		var firstOgg = this.audio.querySelector("[type='audio/ogg']");
 		console.log("ooooggggg", firstOgg);
 		if(firstOgg){
@@ -500,6 +549,14 @@ var OkuPlayer = function (config) {
 		this.currentIndex = fragmentIndex;
 		this.currentFragment = this.fragments[fragmentIndex];
 		this.currentFragment.element.className = "fragm fragm-active";
+		if (!this.isFragmentInView(this.currentIndex) &&
+            this.currentFragment.element.getAttribute('data-inview') !== "true"
+            ){
+			this.events.pageended.dispatch();
+		}
+		else{
+			
+		}
 	}
 	
 	this.playFragment = function(fragmentIndex){
@@ -551,12 +608,6 @@ var OkuPlayer = function (config) {
 		this.currentIndex = this.currentIndex+1;
 		this.activateFragment(this.currentIndex);
 		this.catchFragmentEnd();
-		if (!this.isFragmentInView(this.currentIndex) && this.currentFragment.element.getAttribute('data-inview') !== "true"){
-			this.events.pageended.dispatch();
-		}
-		else{
-			
-		}		
 	}
 
 
@@ -852,7 +903,7 @@ var OkuPlayer = function (config) {
 		else if(event.type==="loadeddata" || event.type==="timeupdate" ||event.type==="seeked" || event.type==="playing" || event.type==="canplay" || event.type==="canplaythrough"){
 			document.querySelector('#loading-animation').style.display = "none";
 		}
-		console.log(event.type + ' at : ' + ((new Date()).getTime()),
+		/* console.log(event.type + ' at : ' + ((new Date()).getTime()),
 				", readyState:", audio.readyState,
 				", networkState: ", audio.networkState,
 				", current time: ", audio.currentTime,
@@ -874,7 +925,7 @@ var OkuPlayer = function (config) {
 				" src: ", audio.src,
 				" currentSrc: ", audio.currentSrc,
 				" error: ", audio.error,
-				audio.firstChild.type]);		
+				audio.firstChild.type]); */
 		} ;
 	function getbuffered() {
 		var buffered =[];
@@ -939,12 +990,12 @@ var OkuPlayer = function (config) {
 
 		if(this.browser.indexOf("ios_safari") == -1){
 			var visible = element.offsetTop >= contentWindow.pageYOffset
-					&& element.offsetTop + element.offsetHeight < contentWindow.pageYOffset + contentWindow.innerHeight;
-					// console.log(i, visible,   element.offsetTop,contentWindow.pageYOffset, element.offsetTop + element.offsetHeight   , contentWindow.pageYOffset + contentWindow.innerHeight);
+					&& element.offsetTop + element.offsetHeight <= contentWindow.pageYOffset + contentWindow.innerHeight;
+					console.log(i, visible,   element.offsetTop,contentWindow.pageYOffset, element.offsetTop + element.offsetHeight, contentWindow.pageYOffset + contentWindow.innerHeight);
 		}
 		else {
 			var visible = element.offsetTop +  this.innerFrame.offsetTop >= this.innerFrame.offsetParent.scrollTop
-					&& element.offsetTop + element.offsetHeight + this.innerFrame.offsetTop  <  this.innerFrame.offsetParent.scrollTop + (innerHeight - 55);
+					&& element.offsetTop + element.offsetHeight + this.innerFrame.offsetTop  <=  this.innerFrame.offsetParent.scrollTop + (innerHeight - 55);
 					// console.log("ios_safari", visible,   element.offsetTop,  window.pageYOffset);
 		}
 		// console.log(visible);
@@ -986,6 +1037,237 @@ function getFinalURL(url, audio) {
 	request.send();
 }
 
+// shortcuts
+function catchKey(evt) {
+
+        var charPressed = String.fromCharCode(evt.keyCode).toLowerCase();
+        console.log("char pressed: \"" + charPressed + "\"");
+        //alert(charPressed);
+        if  (evt.keyCode == 37 || evt.keyCode == 49 || evt.keyCode == 97) {
+            if(!this.pagedView) return;
+            if (!this.visibleFragments || !this.visibleFragments.length) {
+              this.scroll();
+            }
+            console.log(this.visibleFragments);
+            var newIndex = this.visibleFragments[0].index - 1;
+            if (newIndex < -1) return;
+            var lastFragmentOnPage = this.fragments[newIndex].element;
+            console.log("previous page ends with fragment", newIndex, lastFragmentOnPage);
+            
+            var contentWindow = this.innerFrame.contentWindow;
+            this.unpagify();
+            console.log(lastFragmentOnPage.offsetTop, lastFragmentOnPage.offsetHeight, contentWindow.pageYOffset, contentWindow.innerHeight);
+            contentWindow.scroll(contentWindow.pageXOffset, lastFragmentOnPage.offsetTop + lastFragmentOnPage.offsetHeight - contentWindow.innerHeight) ;
+            console.log(lastFragmentOnPage.offsetTop, lastFragmentOnPage.offsetHeight, contentWindow.pageYOffset, contentWindow.innerHeight);
+            console.log(newIndex, this);
+
+            for(var i = newIndex; i>-2; i--){
+                console.log("INDEX", i);
+                console.log(lastFragmentOnPage.offsetTop, lastFragmentOnPage.offsetHeight, contentWindow.pageYOffset, contentWindow.innerHeight);
+
+                if(!this.isFragmentInView(i)) {
+                    console.log("not in view");
+                    break;
+                }
+                else {
+                    var newIndex = i;
+                }
+            }
+            this.playFragment(newIndex);
+            this.scroll();
+    
+        }
+        else if (evt.keyCode == 39 || evt.keyCode == 50 || evt.keyCode == 98){
+          if(!this.pagedView) return;
+          if (!this.visibleFragments.length) {
+              this.scroll();
+          }
+          console.log("visible fragments", this.visibleFragments);
+          var newIndex = this.visibleFragments[this.visibleFragments.length-1].index + 1;
+
+          console.log("new index", newIndex);
+          console.log(this);
+          if(newIndex < this.fragments.length ) this.playFragment(newIndex);
+                    
+        }
+        else {
+            switch (charPressed) {
+                case "m":
+                  this.paused?this.play():this.suspend();
+                  break;
+                case "w":
+                  var newVolume = this.audio.volume + 0.1;
+                  if(newVolume > 1) newVolume = 1;
+                  this.audio.volume = newVolume;
+                  this.audio.muted = false;
+                  break;
+                case "q":
+                  var newVolume = this.audio.volume - 0.1;
+                  if(newVolume < 0) newVolume = 0;
+                  this.audio.volume = newVolume;
+                  this.audio.muted = false;
+                  break;
+                case "y":
+                  var newIndex = this.currentIndex - 1;
+                  if(newIndex < -1) newIndex = -1;
+                  this.playFragment(newIndex);
+                  break;
+                case "u":
+                  var newIndex = this.currentIndex + 1;
+                  if(newIndex > this.fragments.length - 1) break;
+                  this.playFragment(newIndex);
+                  break;
+                case "l":
+                  var newPlaybackRate = this.audio.playbackRate + 0.1;
+                  if(newPlaybackRate > 2) newPlaybackRate = 2;
+                  this.audio.playbackRate = newPlaybackRate;
+                  break;
+                case "j":
+                  var newPlaybackRate = this.audio.playbackRate - 0.1;
+                  if(newPlaybackRate < 0.5) newPlaybackRate = 0.5;
+                  this.audio.playbackRate = newPlaybackRate;
+                  break;
+                case "k":
+                  this.audio.playbackRate = 1;
+                  break;  
+                case "a":
+                  this.audio.muted ? this.audio.muted = false : this.audio.muted = true;
+                  break;
+                case "n":
+                  document.querySelector("#night-mode").click();
+                  break;
+                case "d":
+                  if(this.fontSize == 6) return;
+                  var newFontSize = parseInt(this.fontSize) + 1;
+                  console.log(newFontSize);
+                  document.querySelectorAll("#text-sizes div")[newFontSize].click();
+                  break;  
+                case "f":
+                  if(this.fontSize == 0) return;
+                  var newFontSize = parseInt(this.fontSize) - 1;
+                  console.log(newFontSize);
+                  document.querySelectorAll("#text-sizes div")[newFontSize].click();
+                  break;
+                case "s":
+                  document.querySelector("#shortcuts-list").click();
+                  break;
+                case "x":
+                  var element = this.currentFragment.element;
+                  var contentWindow = this.innerFrame.contentWindow;
+                  console.log(element.offsetTop, element.offsetHeight, contentWindow.pageYOffset, contentWindow.innerHeight);
+                  this.navbar.style.display = "none";
+                  this.container.style.bottom = 0;
+                  console.log(element.offsetTop, element.offsetHeight, contentWindow.pageYOffset, contentWindow.innerHeight);
+                  break;
+                case "v":
+                  var element = this.currentFragment.element;
+                  var contentWindow = this.innerFrame.contentWindow;
+                  console.log(element.offsetTop, element.offsetHeight, contentWindow.pageYOffset, contentWindow.innerHeight);
+                  this.navbar.style.display = "block";
+                  this.container.style.bottom = "55px";
+                  this.innerFrame.style.height = "100%"
+                  console.log(element.offsetTop, element.offsetHeight, contentWindow.pageYOffset, contentWindow.innerHeight);
+                  if (this.paused) {
+                    document.querySelector("#play").focus();
+                  }
+                  else{
+                      document.querySelector("#stop").focus();
+                  }
+                  console.log(document.activeElement);
+                  break;
+                default:
+                  return;
+            }
+        }
+
+}
 
 
+function catchKeyBeforeStart(evt) {
+        
+        var charPressed = String.fromCharCode(evt.keyCode).toLowerCase();
+        console.log("char pressed: \"" + charPressed + "\"");
+        //alert(charPressed);
+
+        switch (charPressed) {
+        case "m":
+          evt.preventDefault();
+          window.onkeydown = null;
+          this.innerFrame.contentWindow.onkeydown = null;
+          document.querySelector("#firstplay").click();
+          break;
+
+        default:
+          return;
+      }
+
+}
+this.shortcutslist = "m: play/pause\n\n" +
+    "d: increase text size\n" +
+    "f: decrease text size\n\n" +
+    "w: increase volume\n" +
+    "q: decrease volume\n" +
+    "a: mute\n\n" +
+    "y: previous fragment\n" +
+    "u: next fragment\n\n" +
+    "l: increase playback rate\n" +
+    "j: decrease playback rate\n" +
+    "k: reset playback rate\n\n" +
+    "n: toggle night mode\n\n" +
+    "x: hide toolbar\n" +
+    "v: show toolbar\n\n" +
+    "left arrow: previous page\n" +
+    "right arrow: next page\n\n" +
+    "s: show this list\n\n";
+
+    
+
+this.checkSavedSettings = function() {
+var cookieObject = {};
+    var cookieArray = [];
+    if(document.cookie) {
+         cookieArray = document.cookie.split(";");
+        for (i=0; i<cookieArray.length; i++){
+            cookieArray[i] = cookieArray[i].split("=");
+            cookieObject[cookieArray[i][0].trim()] =  cookieArray[i][1];
+        }
+        console.log(cookieObject);
+        if(cookieObject.ttSettings) {
+            ttSettings = JSON.parse(cookieObject.ttSettings);
+            console.log("found settings");
+            loadSettings();
+        }
+        if(cookieObject.currentno) {
+            lastcurrentno = parseInt(cookieObject.currentno);
+        }
+
+    }
+
+}
+
+this.checkSavedSettings();
+
+this.setCookie = function(){
+    document.cookie = "ttSettings=" + JSON.stringify(ttSettings) + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/librifs";
+    document.cookie = "currentno=" + this.currentIndex + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=" + location.pathname;
+}
+
+this.loadSettings = function(){
+    var a = document.querySelector("#autoscroll");
+    var b = document.querySelector("#select-display-mode");
+    var c = document.querySelector("#cont");
+    var f = document.querySelector("#text-sizes").getElementsByTagName("input");
+    console.log(f);
+    console.log("a", a, ttSettings.a );
+
+    a.checked = ttSettings.a;
+    
+    b.checked = ttSettings.b;
+    toggleDisplayMode();
+    
+    c.checked = ttSettings.c;
+    
+    setFontSize(f[ttSettings.f]);
+}
+    
 }
