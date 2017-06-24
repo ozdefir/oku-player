@@ -26,7 +26,7 @@ body {
 	text-align:justify;
 	background-color:#fff;
 	font-size:100%;
-	font-family: Georgia, 'Times New Roman', Times, serif!important;
+	font-family: "Palatino Linotype", "Palatino", "Athena", "Arial Unicode MS", "Georgia Greek", "MgAvantG UC Pol", "Cardo", "Code2000", "MgOldTimes UC Pol", "Silver Humana", "TITUS Cyberbit Basic", "Vusillus Old Face", 'Times New Roman', Times, serif!important;
 	overflow:hidden;
 }
 
@@ -142,17 +142,15 @@ body.night-mode {
 	background-color:black;
 }
 body.night-mode  .fragm{
-	color:#888;
-	background-color:black;
+	color:#333;
 }
 body.night-mode .fragm-paused, body.night-mode #intro-div.fragm-paused>*>span{
-	color:#fff;
+	color:#AAA;
 	background-color:inherit;
 
 }
 body.night-mode .fragm-active, body.night-mode #intro-div.fragm-active>*>span{
-	color:#fff;
+	color:#AAA;
 	outline:none;
 	background-color:#222;
-	outline:none;
-}
+ }

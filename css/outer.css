@@ -197,3 +197,7 @@ body.night-mode .navbar{
 body.night-mode iframe{
 	border: 1px solid black!important;
 }
+
+#shortcuts-list{
+    margin-left:17px;
+}
