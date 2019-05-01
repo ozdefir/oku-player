@@ -50,7 +50,7 @@ In addition it is possible to add event listeners for timedtext load, fragment e
 okuPlayerInstance.on("pageended", "pageturnEffect");
 ~~~~
 
-Visit [readiance.org](https://readiance.org) to see working examples.
+Visit [https://archive.org/details/@timedtexts](https://archive.org/details/@timedtexts) to see working examples.
 
 ## Limitations
 + Because of the same-origin policy the XHTML and JSON files should be hosted on the same domain as the timedtext player unless the target host allows CORS.
