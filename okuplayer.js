@@ -562,7 +562,7 @@ var OkuPlayer = function (config) {
 	this.playFragment = function(fragmentIndex){
 		console.log("deactivating last element", this.currentIndex);
         console.log(this.currentFragment);
-		this.currentFragment.element.className = "fragm";
+		this.currentFragment.element.className = this.fragmentClassName;
 		this.activateFragment(fragmentIndex);
 		!this.seekBuffer && this.browser == "android_chrome" ? this.audio.muted = true : "";
 		if(this.audio.readyState > 0){
@@ -604,7 +604,7 @@ var OkuPlayer = function (config) {
 	
 	this.activateNextElement = function(){
 		console.log("deactivating last element", this.currentIndex);
-		this.currentFragment.element.className = "fragm";
+		this.currentFragment.element.className = this.fragmentClassName;
 		this.currentIndex = this.currentIndex+1;
 		this.activateFragment(this.currentIndex);
 		this.catchFragmentEnd();
