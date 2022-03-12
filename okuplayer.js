@@ -967,9 +967,9 @@ var OkuPlayer = function (config) {
 	);
 	
 	this.on("timedtextended", (function(){
-					this.playFragment(0);
+					// this.playFragment(0);
 					this.suspend();
-					this.scroll();
+					// this.scroll();
 				}).bind(this)
 	);
 
