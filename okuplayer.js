@@ -305,6 +305,9 @@ var OkuPlayer = function (config) {
 				this.xhtmlContentDiv =  this.xhtmlDocument.querySelector("#xhtml-content");
 				this.xhtmlContentDiv.className = "regular-view nopage";
 				this.fragmentElements = this.xhtmlContentDiv.querySelectorAll("." + this.fragmentClassName);
+				this.fragmentElements.forEach(function(fragmentElement) {
+					fragmentElement.className = "fragm";
+				});
 				this.loadFile(this.syncmapPath, (function(syncmapContent) {
 					
                    
@@ -562,7 +565,7 @@ var OkuPlayer = function (config) {
 	this.playFragment = function(fragmentIndex){
 		console.log("deactivating last element", this.currentIndex);
         console.log(this.currentFragment);
-		this.currentFragment.element.className = this.fragmentClassName;
+		this.currentFragment.element.className = "fragm";
 		this.activateFragment(fragmentIndex);
 		!this.seekBuffer && this.browser == "android_chrome" ? this.audio.muted = true : "";
 		if(this.audio.readyState > 0){
@@ -604,7 +607,7 @@ var OkuPlayer = function (config) {
 	
 	this.activateNextElement = function(){
 		console.log("deactivating last element", this.currentIndex);
-		this.currentFragment.element.className = this.fragmentClassName;
+		this.currentFragment.element.className = "fragm";
 		this.currentIndex = this.currentIndex+1;
 		this.activateFragment(this.currentIndex);
 		this.catchFragmentEnd();
